@@ -1,9 +1,7 @@
 import React from 'react';
 import Title from '@/components/Title';
-import Overview from './_components/Overview';
 import HeroSection from './_components/HeroSection';
 import PreviewList from './_components/PreviewList';
-import SpaceDesign from './_components/SpaceDesign';
 
 import { getFaqs } from '@/app/faq/_lib/faqService';
 import Accordion from '@/app/faq/_components/Accordion';
@@ -19,8 +17,6 @@ export default async function Home() {
     <div>
       <HeroSection />
       <div className="px-4 pb-6 pt-4">
-        <Overview />
-        <SpaceDesign />
         <Title title="Notice" href="/notice" isMainPage={true} />
         <PreviewList tableName="notices" />
         <Title title="FAQ" href="/faq" isMainPage={true} />

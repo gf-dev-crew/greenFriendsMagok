@@ -5,7 +5,7 @@ export interface BaseRecord {
 }
 
 /* 공지사항 태그 타입 */
-export type NoticeTag = '알림' | '입주' | 'Event' | '기타' | '전체';
+export type NoticeTag = '알림' | '공식' | 'Event' | '기타' | '전체';
 
 /* 공지사항 게시글 타입 */
 export interface NoticeTable extends BaseRecord {

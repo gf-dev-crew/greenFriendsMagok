@@ -110,3 +110,17 @@ body {
 .nanum {
   font-family: 'NanumSquareNeoVariable', sans-serif;
 }
+
+@layer components {
+  .checkbox-icon {
+    @apply flex items-center justify-center rounded transition-all duration-200 ease-in-out;
+  }
+
+  .checkbox-icon svg {
+    @apply text-border;
+  }
+
+  input[type='checkbox']:checked + .checkbox-icon svg {
+    @apply text-black;
+  }
+}

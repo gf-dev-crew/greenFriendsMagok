@@ -54,6 +54,8 @@ const config: Config = {
         down: '#f1f1f1',
         accent: '#ff4800',
         product: '#F5F5F5',
+        border: '#c4c7cb',
+        black: '#000',
       },
     },
   },

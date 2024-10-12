@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 
 import { BackButtonServer } from '@/components/_index';
-import { getNoticeById } from '../_lib/noticeService';
+import { getNoticeById } from '../../../lib/services/noticeService';
 import { NoticeTable } from '@/lib/types/database';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
@@ -19,7 +19,7 @@ export default async function NoticeDetailPage({ params }: { params: { id: strin
     <div className="container mx-auto px-2">
       <BackButtonServer className="mb-2" />
       <div className="pt-1 text-sm font-semibold text-secondary">{notice.category}</div>
-      <h3 className="xs:text-xl mb-4 border-b border-primary pb-2 text-lg font-bold">{notice.title}</h3>
+      <h3 className="mb-4 border-b border-primary pb-2 text-lg font-bold xs:text-xl">{notice.title}</h3>
       <div className="whitespace-pre-wrap py-2 text-14">
         {notice.image && (
           <Image

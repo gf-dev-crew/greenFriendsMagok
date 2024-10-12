@@ -1,10 +1,10 @@
 'use client';
 
-import { NoticeTable } from '@/lib/types/database';
 import { useCategoryStore } from '@/lib/stores/categoryStore';
-import { getFilteredNotices } from '@/app/notice/_lib/noticeService';
+import { getFilteredNotices } from '@/lib/services/noticeService';
 import { useEffect, useState } from 'react';
 import NoticeItem from './NoticeItem';
+import { NoticeTable } from '@/lib/types/databaseTypes';
 
 // 공지사항 게시판 컴포넌트의 props 타입 정의
 interface NoticeBoardProps {

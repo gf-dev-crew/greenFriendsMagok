@@ -1,6 +1,6 @@
 'use client';
 
-import { NoticeTable } from '@/lib/types/database';
+import { NoticeTable } from '@/lib/types/databaseTypes';
 import Link from 'next/link';
 
 interface NoticeItemProps {

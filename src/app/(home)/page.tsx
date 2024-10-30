@@ -3,7 +3,7 @@ import Title from '@/components/Title';
 import HeroSection from './_components/HeroSection';
 import PreviewList from './_components/PreviewList';
 
-import { getFaqs } from '@/app/faq/_lib/faqService';
+import { getFaqs } from '@/lib/services/faqService';
 import Accordion from '@/app/faq/_components/Accordion';
 
 export const revalidate = 60; // 60초마다 재검증

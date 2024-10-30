@@ -1,5 +1,5 @@
 import Title from '@/components/Title';
-import { getFaqs } from './_lib/faqService';
+import { getFaqs } from '../../lib/services/faqService';
 import Accordion from './_components/Accordion';
 
 export default async function FAQ() {

@@ -1,6 +1,6 @@
 import { BackButtonServer } from '@/components/_index';
 import ReplyHeader from './_components/ReplyHeader';
-import { getNoticeById } from '../_lib/noticeService';
+import { getNoticeById } from '../../../lib/services/noticeService';
 import { NoticeTable } from '@/lib/types/database';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';

@@ -1,6 +1,6 @@
 import { clientHelpers, serverHelpers } from '@/lib/supabase/helper';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
-import { NoticeTable } from '@/lib/types/databaseTypes';
+import { NoticeTable, S_NoticeTable } from '@/lib/types/databaseTypes';
 
 // 모든 공지사항을 가져오는 함수 (ServerComponent)
 export async function getNotices(): Promise<NoticeTable[]> {
@@ -35,3 +35,44 @@ export async function getRecentNotices(
 
   return data || [];
 }
+
+
+// 모든 공지사항을 가져오는 함수 (ServerComponent)
+export async function getS_Notices(): Promise<S_NoticeTable[]> {
+  console.log('서버에서 공지사항 가져오는 중', serverHelpers.fetchAllFromTable('notice'));
+  return serverHelpers.fetchAllFromTable('notice');
+}
+
+// 특정 ID의 공지사항을 가져오는 함수 (ServerComponent)
+export async function getS_NoticeById(id: number): Promise<S_NoticeTable | null> {
+  return serverHelpers.fetchOneFromTable('notice', id);
+}
+
+// 해당 카테고리에 속하는 공지사항을 가져오는 함수 (ClientComponent)
+export async function getS_FilteredNotices(category: string): Promise<S_NoticeTable[]> {
+  return clientHelpers.fetchFilteredFromTable('notice', category);
+}
+
+// 고정 공지사항을 가져오는 함수 (ServerComponent)
+export async function getS_FixedNotices(category: string): Promise<S_NoticeTable[]> {
+  return serverHelpers.fetchFilteredFromTable('notice', category, 'fixed_yn=true');
+}
+
+// // 최근 공지사항의 제목, ID, 생성일을 가져오는 함수 (ServerComponent)
+// export async function getS_RecentNotices(
+//   limit: number = 5,
+// ): Promise<Pick<S_NoticeTable, 'id' | 'title' | 'created_at' | 'create_user'>[]> {
+//   const supabase = await createServerSupabaseClient();
+//   const { data, error } = await supabase
+//     .from('notice')
+//     .select('id, title, created_at, create_user')
+//     .order('created_at', { ascending: false })
+//     .limit(limit);
+
+//   if (error) {
+//     console.error('최근 공지사항을 가져오는 중 오류 발생:', error);
+//     return [];
+//   }
+
+//   return data || [];
+// }

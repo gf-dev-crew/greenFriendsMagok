@@ -65,13 +65,14 @@ export const serverHelpers = {
   // 서버 측에서 모든 행을 가져오는 함수
   async fetchAllFromTable<T extends TableName>(tableName: T, columns: string = '*'): Promise<Row<T>[]> {
     const supabase = await createServerSupabaseClient();
+    console.log(tableName, columns)
     const { data, error } = await supabase.from(tableName).select(columns).order('created_at', { ascending: false });
 
     if (error) {
       console.error(`서버: ${tableName}에서 데이터를 가져오는 중 오류 발생:`, error);
-      return [];
+      return [];2
     }
-
+    console.log(tableName, '서버에서 받아온 데이터', data);
     return (data as unknown as Row<T>[]) || [];
   },
 
@@ -86,5 +87,28 @@ export const serverHelpers = {
     }
 
     return (data as unknown as Row<T>) || null;
+  },
+
+  // 필터링된 데이터를 가져오는 함수
+  async fetchFilteredFromTable<T extends TableName>(
+    tableName: T,
+    category: string,
+    columns: string = '*',
+  ): Promise<Row<T>[]> {
+    const supabase = createBrowserSupabaseClient();
+    let query = supabase.from(tableName).select(columns).order('created_at', { ascending: false });
+
+    if (category !== '전체') {
+      query = query.ilike('category', `%${category}%`);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error(`클라이언트: ${tableName}에서 데이터 가져오기 오류:`, error);
+      return [];
+    }
+
+    return (data as unknown as Row<T>[]) || [];
   },
 };

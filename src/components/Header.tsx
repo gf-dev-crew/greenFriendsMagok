@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import MeatBallsMenu from './MeatBallsMenu';
 
 const Header = () => {
   return (
@@ -10,7 +9,6 @@ const Header = () => {
         <Link href="/" aria-label="홈으로 이동" className="flex items-center">
           <Image src="/assets/Logo.svg" alt="Nook 로고" width={100} height={25} priority />
         </Link>
-        <MeatBallsMenu />
       </div>
     </header>
   );

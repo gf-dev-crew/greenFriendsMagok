@@ -34,6 +34,7 @@ const config: Config = {
         '16': '1rem',
         '15': '0.9375rem',
         '14': '0.875rem',
+        '13': '0.8125rem',
         '12': '0.75rem',
         '10': '0.625rem',
       },
@@ -45,7 +46,11 @@ const config: Config = {
         extrabold: '800',
       },
       colors: {
+        text: '#222222',
         primary: '#222222',
+        etc: '#5c5c5c',
+        kebab: '#6b7280',
+        testbg: '#637381',
         link: '#dedede',
         white: '#ffffff',
         tertiary: '#A0D1EF',
@@ -60,18 +65,9 @@ const config: Config = {
     },
   },
   plugins: [],
-  utilities: {
-    '.sr-only': {
-      position: 'absolute',
-      width: '1px',
-      height: '1px',
-      padding: '0',
-      margin: '-1px',
-      overflow: 'hidden',
-      clip: 'rect(0, 0, 0, 0)',
-      whiteSpace: 'nowrap',
-      borderWidth: '0',
-    },
+  future: {
+    hoverOnlyWhenSupported: true,
   },
 };
+
 export default config;

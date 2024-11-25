@@ -1,20 +1,14 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import MeatBallsMenu from './MeatBallsMenu';
 
 const Header = () => {
   return (
-    <header className="w-full border-b border-primary bg-white px-2.5 text-primary">
-      <div className="mx-auto flex h-[50px] max-w-screen-xl items-center justify-between">
-        <div className="flex items-center">
-          <Link href="/" aria-label="홈으로 이동">
-            <div className="pt-[4px]">
-              <Image src="/assets/Logo.svg" alt="녹색친구들 마곡 로고" width={244} height={25} priority />
-            </div>
-          </Link>
-        </div>
-        <MeatBallsMenu />
+    <header className="fixed left-1/2 top-0 z-50 w-full max-w-[480px] -translate-x-1/2 bg-white/80 px-[24px]">
+      <div className="flex h-[50px] items-center justify-between">
+        <Link href="/" aria-label="홈으로 이동" className="flex items-center">
+          <Image src="/assets/Logo.svg" alt="Nook 로고" width={100} height={25} priority />
+        </Link>
       </div>
     </header>
   );

@@ -12,13 +12,7 @@
     {
       "files": "*.{js,jsx,ts,tsx}",
       "options": {
-        "parser": "babel-ts"
-      }
-    },
-    {
-      "files": "*.json",
-      "options": {
-        "parser": "json"
+        "parser": "typescript"
       }
     }
   ],

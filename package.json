@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint --cache .",
+    "format": "prettier --cache --write .",
     "generate-types": "npx supabase gen types typescript --project-id vsybjuqprbvflfddzcnp --schema public > types_db.ts"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
     "react-markdown": "^9.0.1",
+    "swiper": "^11.1.15",
     "tailwind-merge": "^2.4.0",
     "zod": "^3.23.8",
     "zustand": "^4.5.4"

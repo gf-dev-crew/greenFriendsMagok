@@ -46,6 +46,7 @@ const config: Config = {
         extrabold: '800',
       },
       colors: {
+        text: '#222222',
         primary: '#222222',
         etc: '#5c5c5c',
         kebab: '#6b7280',

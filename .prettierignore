@@ -44,3 +44,8 @@ public/
 # Specific file types (if needed)
 # *.md
 # *.json
+
+# Additional file types
+*.min.js
+*.min.css
+*.generated.*

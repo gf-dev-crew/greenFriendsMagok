@@ -16,5 +16,7 @@
       "version": "detect"
     }
   },
-  "cache": true
+  "cache": true,
+  "cacheLocation": ".eslintcache",
+  "cacheStrategy": "content"
 }

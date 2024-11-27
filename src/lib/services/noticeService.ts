@@ -1,6 +1,15 @@
 import { clientHelpers, serverHelpers } from '@/lib/supabase/helper';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
 import { NoticeTable, S_NoticeTable } from '@/lib/types/databaseTypes';
+import { Database } from '@/lib/types/types_db';
+import { getFilteredCommonCodeId } from './commonCodeDetail';
+
+type Tables = Database['public']['Tables'];
+type TableName = keyof Tables;
+
+type Row<T extends TableName> = Tables[T]['Row'];
+
 
 // 모든 공지사항을 가져오는 함수 (ServerComponent)
 export async function getNotices(): Promise<NoticeTable[]> {
@@ -36,26 +45,71 @@ export async function getRecentNotices(
   return data || [];
 }
 
-
-// 모든 공지사항을 가져오는 함수 (ServerComponent)
+/*
+  [eunseong.son]
+  모든 공지사항을 가져오는 함수 (ServerComponent)
+  고정여부 체크 / 최근 작성일 순서대로
+  호출방법 : const S_initialNotices = await getS_Notices();
+*/
 export async function getS_Notices(): Promise<S_NoticeTable[]> {
-  console.log('서버에서 공지사항 가져오는 중', serverHelpers.fetchAllFromTable('notice'));
-  return serverHelpers.fetchAllFromTable('notice');
+  const supabase = await createServerSupabaseClient();
+  const tableName = 'notice'
+  const columns = '*'
+  const { data, error } = await supabase.from(tableName).select(columns).order('fixed_yn', { ascending: false }).order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(`서버: ${tableName}에서 데이터를 가져오는 중 오류 발생:`, error);
+    return []; 2
+  }
+  console.log(tableName, '서버에서 받아온 데이터', data);
+  return data || [];
 }
 
-// 특정 ID의 공지사항을 가져오는 함수 (ServerComponent)
+/*
+  [eunseong.son]
+  특정 ID의 공지사항을 가져오는 함수 (ServerComponent)
+  호출방법 : const S_noticeById = await getS_NoticeById(18);
+*/
 export async function getS_NoticeById(id: number): Promise<S_NoticeTable | null> {
-  return serverHelpers.fetchOneFromTable('notice', id);
+  const supabase = await createServerSupabaseClient();
+  const tableName = 'notice'
+  const { data, error } = await supabase.from(tableName).select('*').eq('notice_id', id).single();
+
+  if (error) {
+    console.error(`서버: ${tableName}에서 ID ${id}의 레코드를 가져오는 중 오류 발생:`, error);
+    return null;
+  }
+
+  console.log("data :: ", data)
+  return data || [];
 }
 
-// 해당 카테고리에 속하는 공지사항을 가져오는 함수 (ClientComponent)
+/*
+  [eunseong.son]
+  해당 카테고리에 속하는 공지사항을 가져오는 함수 (ClientComponent)
+  category : 알립니다 / 입주
+  호출방법 : const S_filteredNotices= await getS_FilteredNotices('입주');
+*/
 export async function getS_FilteredNotices(category: string): Promise<S_NoticeTable[]> {
-  return clientHelpers.fetchFilteredFromTable('notice', category);
-}
+  const supabase = await createServerSupabaseClient();
+  const tableName = "notice"
+  const columns = "*"
+  const code_detail_id = await getFilteredCommonCodeId(category) as number
+  console.log("code ::", code_detail_id)
+  let query = supabase.from(tableName).select(columns).order('created_at', { ascending: false });
 
-// 고정 공지사항을 가져오는 함수 (ServerComponent)
-export async function getS_FixedNotices(category: string): Promise<S_NoticeTable[]> {
-  return serverHelpers.fetchFilteredFromTable('notice', category, 'fixed_yn=true');
+  if (category !== '전체') {
+    query = query.eq('category_cd', code_detail_id)
+  }
+
+  const { data, error } = await query
+  if (error) {
+    console.error(`클라이언트: ${tableName}에서 데이터 가져오기 오류:`, error);
+    return [];
+  }
+
+  console.log("data :: ", data)
+  return data || [];
 }
 
 // // 최근 공지사항의 제목, ID, 생성일을 가져오는 함수 (ServerComponent)

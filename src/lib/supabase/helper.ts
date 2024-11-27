@@ -65,14 +65,12 @@ export const serverHelpers = {
   // 서버 측에서 모든 행을 가져오는 함수
   async fetchAllFromTable<T extends TableName>(tableName: T, columns: string = '*'): Promise<Row<T>[]> {
     const supabase = await createServerSupabaseClient();
-    console.log(tableName, columns)
     const { data, error } = await supabase.from(tableName).select(columns).order('created_at', { ascending: false });
 
     if (error) {
       console.error(`서버: ${tableName}에서 데이터를 가져오는 중 오류 발생:`, error);
-      return [];2
+      return [];
     }
-    console.log(tableName, '서버에서 받아온 데이터', data);
     return (data as unknown as Row<T>[]) || [];
   },
 

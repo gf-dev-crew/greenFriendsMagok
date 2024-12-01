@@ -883,11 +883,13 @@ export type Database = {
       }
       notice: {
         Row: {
-          calender_if_yn: string | null
+          calender_end_time: string | null
+          calender_if_yn: boolean | null
+          calender_start_time: string | null
           category_cd: number | null
           create_user: string | null
           created_at: string
-          fixed_yn: string | null
+          fixed_yn: boolean | null
           member_id: number | null
           notice_content: string | null
           notice_id: number
@@ -897,11 +899,13 @@ export type Database = {
           view_count: number
         }
         Insert: {
-          calender_if_yn?: string | null
+          calender_end_time?: string | null
+          calender_if_yn?: boolean | null
+          calender_start_time?: string | null
           category_cd?: number | null
           create_user?: string | null
           created_at?: string
-          fixed_yn?: string | null
+          fixed_yn?: boolean | null
           member_id?: number | null
           notice_content?: string | null
           notice_id?: number
@@ -911,11 +915,13 @@ export type Database = {
           view_count?: number
         }
         Update: {
-          calender_if_yn?: string | null
+          calender_end_time?: string | null
+          calender_if_yn?: boolean | null
+          calender_start_time?: string | null
           category_cd?: number | null
           create_user?: string | null
           created_at?: string
-          fixed_yn?: string | null
+          fixed_yn?: boolean | null
           member_id?: number | null
           notice_content?: string | null
           notice_id?: number
@@ -1038,6 +1044,7 @@ export type Database = {
           apply_cost: number | null
           apply_end_time: string | null
           apply_start_time: string
+          calender_if_yn: boolean | null
           capacity: number | null
           create_user: string | null
           created_at: string
@@ -1045,6 +1052,7 @@ export type Database = {
           program_content: string
           program_id: number
           program_name: string
+          program_start_time: string
           program_type: number
           time_taken: number | null
           update_user: string | null
@@ -1054,6 +1062,7 @@ export type Database = {
           apply_cost?: number | null
           apply_end_time?: string | null
           apply_start_time: string
+          calender_if_yn?: boolean | null
           capacity?: number | null
           create_user?: string | null
           created_at?: string
@@ -1061,6 +1070,7 @@ export type Database = {
           program_content: string
           program_id?: number
           program_name: string
+          program_start_time: string
           program_type: number
           time_taken?: number | null
           update_user?: string | null
@@ -1070,6 +1080,7 @@ export type Database = {
           apply_cost?: number | null
           apply_end_time?: string | null
           apply_start_time?: string
+          calender_if_yn?: boolean | null
           capacity?: number | null
           create_user?: string | null
           created_at?: string
@@ -1077,6 +1088,7 @@ export type Database = {
           program_content?: string
           program_id?: number
           program_name?: string
+          program_start_time?: string
           program_type?: number
           time_taken?: number | null
           update_user?: string | null

@@ -1,10 +1,10 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 
-export async function getFilteredCommonCodeId(codeDetailName: string) {
+export async function getFilteredCommonCodeId(code_id: number, codeDetailName: string) {
     const supabase = await createServerSupabaseClient();
     const tableName = "common_code_detail"
     const columns = "code_detail_id"
-    const { data, error } = await supabase.from(tableName).select(columns).eq('code_detail_name', codeDetailName)
+    const { data, error } = await supabase.from(tableName).select(columns).eq('code_id', code_id).eq('code_detail_name', codeDetailName)
     if (error) {
         console.error(`서버: ${tableName}에서 ID ${codeDetailName}의 레코드를 가져오는 중 오류 발생:`, error);
         return null;

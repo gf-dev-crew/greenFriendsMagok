@@ -1,10 +1,12 @@
 import { clientHelpers, serverHelpers } from '@/lib/supabase/helper';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { createBrowserSupabaseClient } from '@/lib/supabase/client';
-import { NoticeTable, S_NoticeTable } from '@/lib/types/databaseTypes';
+import { NoticeTable, NoticeRow, NoticeRowInsert, NoticeRowUpdate } from '@/lib/types/databaseTypes';
 import { Database } from '@/lib/types/types_db';
 import { getFilteredCommonCodeId } from './commonCodeDetail';
 import { getFiles } from './fileService';
+import { pagenation } from '../utils/pagenation';
+import { handledError, handledUploadError } from '@/lib/utils/error';
 
 type Tables = Database['public']['Tables'];
 type TableName = keyof Tables;
@@ -51,56 +53,19 @@ export async function getRecentNotices(
   모든 공지사항을 가져오는 함수 (ServerComponent)
   페이지네이션 10개 고정
   고정여부 체크 / 최근 작성일 순서대로
-  호출방법 : const S_initialNotices = await getS_Notices(nowPage, isLast);
+  호출방법 : const initialNotices = await getNotices(nowPage, isLast);
 */
-export async function getS_Notices(nowPage: number, isLast: boolean): Promise<{}> {
+export async function getNotice(nowPage: number, isLast: boolean): Promise<{}> {
   const supabase = await createServerSupabaseClient();
   const tableName = 'notice'
   const columns = '*'
-  let lastPage = 1
-  let returnData = { data: [], count: 0, lastPage: 1 } as { data: any, count: number, lastPage: number }
   let query = supabase.from(tableName).select(columns).order('fixed_yn', { ascending: false }).order('created_at', { ascending: false });
   const { count, error } = await supabase.from(tableName).select(columns, { count: 'exact' }).order('fixed_yn', { ascending: false }).order('created_at', { ascending: false });
-  if (nowPage == 1) { // 처음 데이터 호출 시
-    if (count != null && count > 10) { // 데이터가 10개 이상 있을 시
-      lastPage = Math.floor(count / 10) + 1
-      const { data, error } = await query.range(0, 9);
-      returnData.data = data
-      returnData.count = count
-      returnData.lastPage = lastPage
-      if (error) {
-        return getErrorMessage(error, tableName);
-      }
-      return returnData || []
-    } else { // 데이터가 10개 미만일 시
-      const { data, error } = await query;
-      returnData.data = data
-      returnData.count = count ? count : 0
-      returnData.lastPage = lastPage
-      if (error) {
-        return getErrorMessage(error, tableName);
-      }
-      return returnData || []
-    }
-  }
-  else if (nowPage > 1) { // 페이지 데이터 호출 시
-    if (isLast) { // 마지막 페이지 일 때
-      const { data, error } = await query.range(nowPage * 10 - 10, count ? count - 1 : 0);
-      if (error) {
-        return getErrorMessage(error, tableName);
-      }
-      return data || []
-    } else { // 마지막 페이지가 아닐 때
-      const { data, error } = await query.range(nowPage * 10 - 10, nowPage * 10 - 1);
-      if (error) {
-        return getErrorMessage(error, tableName);
-      }
-      return data || []
-    }
+  if (count != null && count > 0) {
+    return pagenation(nowPage, isLast, query, count, tableName)
   }
   if (error) {
-    console.error(`서버: ${tableName}에서 데이터를 가져오는 중 오류 발생:`, error);
-    return [];
+    return handledError(error, tableName);
   }
   return [];
 }
@@ -110,65 +75,26 @@ export async function getS_Notices(nowPage: number, isLast: boolean): Promise<{}
   해당 카테고리에 속하는 공지사항을 가져오는 함수 (ClientComponent)
   페이지네이션 10개 고정
   category : 알립니다 / 입주
-  호출방법 : const S_filteredNotices= await getS_FilteredNotices('입주', 1, false);
+  호출방법 : const filteredNotices= await getFilteredNotices('입주', 1, false);
 */
-export async function getS_FilteredNotices(category: string, nowPage: number, isLast: boolean): Promise<{}> {
+export async function getFilteredNotice(category: string, nowPage: number, isLast: boolean): Promise<{}> {
   const supabase = await createServerSupabaseClient();
   const tableName = "notice"
   const columns = "*"
-  const code_detail_id = await getFilteredCommonCodeId(category) as number
+  const code_detail_id = await getFilteredCommonCodeId(200, category) as number
   console.log("code ::", code_detail_id)
-  let lastPage = 1
-  let returnData = { data: [], count: 0, lastPage: 1 } as { data: any, count: number, lastPage: number }
 
   let query = supabase.from(tableName).select(columns, { count: 'exact' }).order('fixed_yn', { ascending: false }).order('created_at', { ascending: false });
 
   if (category !== '전체') {
     query = query.eq('category_cd', code_detail_id)
   }
-
   const { data, count, error } = await query;
-
-  if (nowPage == 1) { // 처음 데이터 호출 시
-    if (count != null && count > 10) { // 데이터가 10개 이상 있을 시
-      lastPage = Math.floor(count / 10) + 1
-      const { data, error } = await query.range(0, 9);
-      returnData.data = data
-      returnData.count = count
-      returnData.lastPage = lastPage
-      if (error) {
-        return getErrorMessage(error, tableName);
-      }
-      return returnData || []
-    } else { // 데이터가 10개 미만일 시
-      const { data, error } = await query;
-      returnData.data = data
-      returnData.count = count ? count : 0
-      returnData.lastPage = lastPage
-      if (error) {
-        return getErrorMessage(error, tableName);
-      }
-      return returnData || []
-    }
-  }
-  else if (nowPage > 1) { // 페이지 데이터 호출 시
-    if (isLast) { // 마지막 페이지 일 때
-      const { data, error } = await query.range(nowPage * 10 - 10, count ? count - 1 : 0);
-      if (error) {
-        return getErrorMessage(error, tableName);
-      }
-      return data || []
-    } else { // 마지막 페이지가 아닐 때
-      const { data, error } = await query.range(nowPage * 10 - 10, nowPage * 10 - 1);
-      if (error) {
-        return getErrorMessage(error, tableName);
-      }
-      return data || []
-    }
+  if (count != null && count > 0) {
+    return pagenation(nowPage, isLast, query, count, tableName)
   }
   if (error) {
-    console.error(`서버: ${tableName}에서 데이터를 가져오는 중 오류 발생:`, error);
-    return [];
+    return handledError(error, tableName);
   }
   return data || [];
 }
@@ -176,27 +102,75 @@ export async function getS_FilteredNotices(category: string, nowPage: number, is
 /*
   [eunseong.son]
   특정 ID의 공지사항을 가져오는 함수 (ServerComponent)
-  호출방법 : const S_noticeById = await getS_NoticeById(18);
+  호출방법 : const noticeById = await getNoticeById(18);
 */
-export async function getS_NoticeById(id: number): Promise<S_NoticeTable | null> {
+// export async function getNoticeById(id: number): Promise<NoticeRow | null> {
+//   const supabase = await createServerSupabaseClient();
+//   const tableName = 'notice'
+//   const { data, error } = await supabase.from(tableName).select('*').eq('notice_id', id).single();
+//   const images = await getFiles(6, id)
+
+//   if (error) {
+//     return handledError(error, tableName);
+//   }
+
+//   (data as any).images = images
+//   return data || [];
+// }
+
+// 공지사항 Insert
+export async function insertNotice(notice: NoticeRowInsert) {
   const supabase = await createServerSupabaseClient();
   const tableName = 'notice'
-  const { data, error } = await supabase.from(tableName).select('*').eq('notice_id', id).single();
-  const images = await getFiles(6, id)
+  const notice_image = notice.notice_image
+  const notice_image_path = await uploadNoticeImage(notice_image)
+  if (notice_image_path) {
+    const { data, error } = await supabase.from(tableName).insert({
+      ...notice,
+      notice_image: notice_image_path,
+    });
+  }
+}
+
+// 공지사항 Update
+export async function updateNotice(notice: NoticeRowUpdate) {
+  const supabase = await createServerSupabaseClient();
+  const tableName = 'notice'
+  const notice_image = notice.notice_image
+  const notice_image_path = await uploadNoticeImage(notice_image)
+  if (notice_image_path && notice.notice_id) {
+    const { data, error } = await supabase.from(tableName).update({
+      ...notice,
+      notice_image: notice_image_path,
+      updated_at: new Date().toISOString()
+    }).eq('notice_id', notice.notice_id);
+  }
+}
+
+// 공지사항 Delete
+export async function deleteNotice(notice_id: number) {
+  const supabase = await createServerSupabaseClient();
+  const tableName = 'notice'
+  const response = await supabase.from(tableName).delete().eq('notice_id', notice_id);
+}
+
+// 공지사항 이미지 업로드
+export async function uploadNoticeImage(file: any) {
+  const supabase = await createServerSupabaseClient();
+  const { data, error } = await supabase.storage.from(`${process.env.NEXT_PUBLIC_STORAGE_BUCKET}/${process.env.NOTICE_BUCKET}`)
+    .upload(file.name + crypto.randomUUID(), file, { upsert: true });
 
   if (error) {
-    console.error(`서버: ${tableName}에서 ID ${id}의 레코드를 가져오는 중 오류 발생:`, error);
-    return null;
+    return handledUploadError(error, `${process.env.NEXT_PUBLIC_STORAGE_BUCKET}/${process.env.NOTICE_BUCKET}`);
   }
-  
-  (data as any).images = images
-  return data || [];
+  console.log("upload Data :: ", data)
+  return data;
 }
 
 // // 최근 공지사항의 제목, ID, 생성일을 가져오는 함수 (ServerComponent)
 // export async function getS_RecentNotices(
 //   limit: number = 5,
-// ): Promise<Pick<S_NoticeTable, 'id' | 'title' | 'created_at' | 'create_user'>[]> {
+// ): Promise<Pick<NoticeRow, 'id' | 'title' | 'created_at' | 'create_user'>[]> {
 //   const supabase = await createServerSupabaseClient();
 //   const { data, error } = await supabase
 //     .from('notice')
@@ -211,8 +185,3 @@ export async function getS_NoticeById(id: number): Promise<S_NoticeTable | null>
 
 //   return data || [];
 // }
-
-function getErrorMessage(error: any, tableName: string): any[] {
-  console.error(`서버: ${tableName}에서 데이터를 가져오는 중 오류 발생:`, error);
-  return [];
-}

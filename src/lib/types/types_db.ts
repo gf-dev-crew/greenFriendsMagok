@@ -267,7 +267,6 @@
 
 
 // ================================
-
 export type Json =
   | string
   | number
@@ -395,6 +394,7 @@ export type Database = {
         Row: {
           comment_class: number | null
           comment_id: number
+          comment_image: string | null
           comment_order: number | null
           community_id: number
           create_user: string | null
@@ -408,6 +408,7 @@ export type Database = {
         Insert: {
           comment_class?: number | null
           comment_id?: number
+          comment_image?: string | null
           comment_order?: number | null
           community_id: number
           create_user?: string | null
@@ -421,6 +422,7 @@ export type Database = {
         Update: {
           comment_class?: number | null
           comment_id?: number
+          comment_image?: string | null
           comment_order?: number | null
           community_id?: number
           create_user?: string | null
@@ -689,6 +691,7 @@ export type Database = {
           created_at: string
           faq_content: string | null
           faq_id: number
+          faq_image: string | null
           faq_title: string
           update_user: string | null
           updated_at: string
@@ -698,6 +701,7 @@ export type Database = {
           created_at?: string
           faq_content?: string | null
           faq_id?: number
+          faq_image?: string | null
           faq_title: string
           update_user?: string | null
           updated_at?: string
@@ -707,6 +711,7 @@ export type Database = {
           created_at?: string
           faq_content?: string | null
           faq_id?: number
+          faq_image?: string | null
           faq_title?: string
           update_user?: string | null
           updated_at?: string
@@ -893,6 +898,7 @@ export type Database = {
           member_id: number | null
           notice_content: string | null
           notice_id: number
+          notice_image: string | null
           notice_title: string | null
           update_user: string | null
           updated_at: string | null
@@ -909,6 +915,7 @@ export type Database = {
           member_id?: number | null
           notice_content?: string | null
           notice_id?: number
+          notice_image?: string | null
           notice_title?: string | null
           update_user?: string | null
           updated_at?: string | null
@@ -925,6 +932,7 @@ export type Database = {
           member_id?: number | null
           notice_content?: string | null
           notice_id?: number
+          notice_image?: string | null
           notice_title?: string | null
           update_user?: string | null
           updated_at?: string | null
@@ -1044,6 +1052,7 @@ export type Database = {
           apply_cost: number | null
           apply_end_time: string | null
           apply_start_time: string
+          banner_image: string | null
           calender_if_yn: boolean | null
           capacity: number | null
           create_user: string | null
@@ -1051,6 +1060,7 @@ export type Database = {
           place: string | null
           program_content: string
           program_id: number
+          program_image: string | null
           program_name: string
           program_start_time: string
           program_type: number
@@ -1062,6 +1072,7 @@ export type Database = {
           apply_cost?: number | null
           apply_end_time?: string | null
           apply_start_time: string
+          banner_image?: string | null
           calender_if_yn?: boolean | null
           capacity?: number | null
           create_user?: string | null
@@ -1069,6 +1080,7 @@ export type Database = {
           place?: string | null
           program_content: string
           program_id?: number
+          program_image?: string | null
           program_name: string
           program_start_time: string
           program_type: number
@@ -1080,6 +1092,7 @@ export type Database = {
           apply_cost?: number | null
           apply_end_time?: string | null
           apply_start_time?: string
+          banner_image?: string | null
           calender_if_yn?: boolean | null
           capacity?: number | null
           create_user?: string | null
@@ -1087,6 +1100,7 @@ export type Database = {
           place?: string | null
           program_content?: string
           program_id?: number
+          program_image?: string | null
           program_name?: string
           program_start_time?: string
           program_type?: number
@@ -1270,6 +1284,7 @@ export type Database = {
           member_id: number | null
           qna_content: string | null
           qna_id: number
+          qna_image: string | null
           qna_title: string | null
           update_user: string | null
           updated_at: string
@@ -1280,6 +1295,7 @@ export type Database = {
           member_id?: number | null
           qna_content?: string | null
           qna_id?: number
+          qna_image?: string | null
           qna_title?: string | null
           update_user?: string | null
           updated_at?: string
@@ -1290,6 +1306,7 @@ export type Database = {
           member_id?: number | null
           qna_content?: string | null
           qna_id?: number
+          qna_image?: string | null
           qna_title?: string | null
           update_user?: string | null
           updated_at?: string
@@ -1310,6 +1327,7 @@ export type Database = {
           created_at: string
           qna_answer_content: string | null
           qna_answer_id: number
+          qna_answer_image: string | null
           qna_id: number | null
           update_user: string | null
           updated_at: string
@@ -1319,6 +1337,7 @@ export type Database = {
           created_at?: string
           qna_answer_content?: string | null
           qna_answer_id?: number
+          qna_answer_image?: string | null
           qna_id?: number | null
           update_user?: string | null
           updated_at?: string
@@ -1328,6 +1347,7 @@ export type Database = {
           created_at?: string
           qna_answer_content?: string | null
           qna_answer_id?: number
+          qna_answer_image?: string | null
           qna_id?: number | null
           update_user?: string | null
           updated_at?: string
@@ -1420,6 +1440,7 @@ export type Database = {
         Row: {
           category_cd: number | null
           community_id: number
+          community_image: string | null
           content: string | null
           create_user: string | null
           created_at: string
@@ -1433,6 +1454,7 @@ export type Database = {
         Insert: {
           category_cd?: number | null
           community_id?: number
+          community_image?: string | null
           content?: string | null
           create_user?: string | null
           created_at?: string
@@ -1446,6 +1468,7 @@ export type Database = {
         Update: {
           category_cd?: number | null
           community_id?: number
+          community_image?: string | null
           content?: string | null
           create_user?: string | null
           created_at?: string
